@@ -18,5 +18,5 @@ export const Documents = new FilesCollection({
 
     }
   },
-  storagePath: '/documents'   //comment in in production, out in development*/
+  //storagePath: '/documents'   //comment in in production, out in development*/
 });
