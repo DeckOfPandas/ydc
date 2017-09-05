@@ -21,6 +21,6 @@ Vagrant.configure(2) do |config|
   SHELL
 
   # Set up and run meteor
-  config.vm.provision "shell", :run => 'once', inline: "/bin/sh /vagrant/meteor_setup.sh"
-  config.vm.provision "shell", :run => 'always', inline: "/bin/sh /vagrant/meteor_buildandrun.sh"
+  config.vm.provision "shell", :run => 'once', path: "./meteor_setup.sh"
+  config.vm.provision "shell", :run => 'always', path: "./meteor_buildandrun.sh"
 end
