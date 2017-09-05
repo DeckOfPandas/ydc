@@ -1,21 +1,26 @@
 Vagrant.configure(2) do |config|
+
+  # Config params
   config.vm.box = "ubuntu/xenial64"
 
-  # The more the better; this feels like minimum-viable
+  # Machine spec
   config.vm.provider "virtualbox" do |v|
-    v.memory = 4096
+    v.memory = 2048
     v.cpus = 2
+    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/SHARE_NAME", "1"]
   end
 
-  config.vm.network "forwarded_port", guest: 8000, host: 8888
+  # Forward port for connecting to guest from host machine
+  config.vm.network "forwarded_port", guest: 3000, host: 4567
 
-  config.vm.provision "shell", inline: <<-SHELL
+  # Install required programs
+  config.vm.provision "shell", :run => 'once', inline: <<-SHELL
     sudo apt-get update
     sudo apt-get install --yes docker docker-compose nodejs npm
-    sudo npm install meteor
-    sudo curl https://install.meteor.com | /bin/sh
-    sudo adduser ubuntu docker
-    cd /vagrant/ydc
-    meteor npm install
+    curl https://install.meteor.com | /bin/sh
   SHELL
+
+  # Set up meteor and run
+  config.vm.provision "shell", :run => 'always', inline: "/bin/sh /vagrant/install.sh"
+  config.vm.provision "shell", :run => 'always', inline: "/bin/sh /vagrant/meteor_run.sh"
 end
